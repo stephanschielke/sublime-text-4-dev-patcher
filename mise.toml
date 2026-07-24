@@ -1,0 +1,61 @@
+# Project-local mise config for sublime-text-4-dev-patcher.
+# ELF/binary-analysis tooling - pinned to Python 3.12 so capstone + pyelftools
+# wheels install cleanly (the sibling plugin's 3.14 pin is irrelevant here).
+
+[tools]
+uv = "latest"
+ruff = "latest"
+
+[settings]
+python.uv_venv_auto = "create|source"
+
+[env]
+_.python.venv = { path = ".venv", create = true }
+# Pin the interpreter for this project; overrides any global UV_PYTHON leak.
+UV_PYTHON = "3.12"
+
+[tasks.setup]
+description = "Create the project venv on Python 3.12"
+run = "uv venv --python 3.12 --clear"
+
+[tasks.sync]
+description = "Resolve + install dependencies (incl. dev group)"
+run = "uv sync"
+
+[tasks.lint]
+description = "Run ruff checks (auto-fix) + format check"
+run = [
+  "uv run ruff check --fix",
+  "uv run ruff format --check",
+]
+
+[tasks.format]
+description = "Format with ruff"
+run = "uv run ruff format"
+
+[tasks.test]
+description = "Run the test suite"
+run = "uv run pytest"
+
+[tasks.locate]
+description = "Cross-check signature offsets vs hardcoded SITES on the clean 4205 binary (expects LOCATE: MATCH)"
+run = "uv run st4patch --src binaries/clean-original/4205-linux-amd64/sublime_text --locate"
+
+[tasks.verify]
+description = "Report patch-site signature presence on the clean 4205 binary (patches nothing)"
+run = "uv run st4patch --src binaries/clean-original/4205-linux-amd64/sublime_text --verify-only"
+
+[tasks."channels:refresh"]
+description = "Refresh downloads/official-versions.json from the live APT dev/stable Packages indices"
+run = "uv run python -m st4patcher.channels --write downloads/official-versions.json"
+
+[tasks.download]
+description = "Fetch release artifacts for one or more builds (e.g. mise run download 4205)"
+run = "./downloads/download.sh"
+
+[tasks."check:scripts"]
+description = "bash -n syntax check on the shell scripts"
+run = """
+bash -n downloads/download.sh
+bash -n scripts/sublime-trace-startup
+"""

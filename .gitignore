@@ -1,0 +1,83 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.venv/
+.ruff_cache/
+.pytest_cache/
+
+# IDE
+.idea/
+
+# Agent-harness scaffolding (not portable across LLM tooling; keep out of the
+# public repo). The RE record + patcher stand on their own without these.
+.agents/
+.omo/
+# Local working state (git-local; kept out of the repo)
+.slim/
+
+docs/handoffs/
+
+# OS
+.DS_Store
+
+# ──────────────────────────────────────────────────────────────────────────
+# Sublime binary research artifacts (multi-GB downloads / extracts / dumps).
+# Source-of-truth = downloads/download.sh (regenerates the tree) + the docs/
+# findings trackers. Binaries are local-only / re-downloadable.
+# ──────────────────────────────────────────────────────────────────────────
+
+# Downloaded release artifacts for every build (re-fetch with downloads/download.sh).
+# Ignored by extension below; directory shape is preserved by .gitkeep +
+# downloads/EXPECTED_ARTIFACTS.md (the "what it looks like" indicator).
+downloads/**/*.exe
+downloads/**/*.zip
+downloads/**/*.deb
+downloads/**/*.rpm
+downloads/**/*.tar.xz
+downloads/**/*.part
+
+# The reference binary + every patched/experiment variant (compiled, license-bound).
+binaries/clean-original/**/sublime_text
+binaries/patches-candidates/sublime_text*
+
+# Cloned third-party reference projects (keep ignored; provenance documented in
+# research/RESEARCH_NOTES.md). Never commit their history.
+research/related-projects/
+
+# Large ELF / objdump / readelf / string dumps kept locally for analysis only.
+research/ELF/
+research/objdumps/
+research/string-dumps/
+
+# Nested git repos anywhere (reference clones, never commit their history)
+**/.git/
+
+# Sublime binary copies by name anywhere in the tree (belt-and-suspenders).
+sublime_text
+sublime_text.old
+sublime_text.*
+plugin_host-*
+
+# Binary / archive blobs (belt-and-suspenders across the whole tree)
+*.deb
+*.rpm
+*.exe
+*.zip
+*.tar.xz
+*.tar.gz
+*.tgz
+*.pkg.tar.xz
+*.so
+*.so.*
+*.dylib
+*.dll
+*.bin
+
+# Local experiment scratch (binary copies, patched test outputs)
+*.patched
+*.bak
+
+# Keep directory-shape markers despite the broad ignores above
+!.gitkeep

@@ -1,0 +1,71 @@
+Research and Educational Use License
+=====================================
+
+Copyright (c) 2026 the contributors of sublime-text-4-dev-patcher.
+
+This is a source-available license. It is NOT an OSI-approved open-source
+license. Read it before using, copying, or distributing this repository (the
+"Software").
+
+The Software is a reverse-engineering record and a patcher for the startup
+license window of Sublime Text 4 (Linux x64). It contains no Sublime Text
+binaries and no license keys. "Sublime Text" and related marks belong to
+Sublime HQ Pty Ltd, which is not affiliated with, and does not endorse, this
+project.
+
+
+1. Grant
+
+Subject to the conditions and restrictions below, permission is granted, free
+of charge, to any person obtaining a copy of the Software, to use, copy, modify,
+and create derivative works of the Software solely for the following purposes:
+
+  (a) developing and testing the person's own software (for example, plugins)
+      against Sublime Text builds the person is otherwise entitled to run; and
+
+  (b) interoperability, security, and reverse-engineering research on a copy of
+      Sublime Text that the person already lawfully owns and installed.
+
+
+2. Conditions
+
+  (a) This license, and the accompanying DISCLAIMER.md and NOTICE.md files,
+      must be included in all copies or substantial portions of the Software.
+
+  (b) You must comply with the Sublime Text End User License Agreement and with
+      all applicable laws. If you use Sublime Text, buy a valid license:
+      https://www.sublimehq.com/store/text
+
+
+3. Restrictions
+
+  You may NOT:
+
+  (a) use the Software, or any derivative, for commercial purposes, including
+      selling, reselling, or offering a paid service that circumvents Sublime
+      Text licensing;
+
+  (b) distribute, publish, or share any patched Sublime Text binary, any Sublime
+      Text binary, any extracted Sublime Text asset, or any license key;
+
+  (c) use the Software to avoid paying for a Sublime Text license that you are
+      required to hold, or to enable others to do so; or
+
+  (d) remove or alter this license, the disclaimer, or the trademark and
+      non-affiliation notices.
+
+
+4. No Warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+
+5. Limitation of Liability
+
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR
+OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+OR OTHER DEALINGS IN THE SOFTWARE. You are solely responsible for how you use
+the Software and for ensuring your use is lawful in your jurisdiction.

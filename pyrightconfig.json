@@ -1,0 +1,16 @@
+{
+  "pythonVersion": "3.12",
+  "venvPath": ".",
+  "venv": ".venv",
+  "typeCheckingMode": "basic",
+  "include": [
+    "st4patcher",
+    "tests"
+  ],
+  "exclude": [
+    ".venv",
+    "**/__pycache__",
+    "sublime-dev-binary-for-tests/patchwork"
+  ],
+  "reportMissingModuleSource": "none"
+}

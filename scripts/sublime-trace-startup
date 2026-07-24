@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Capture fast startup trace for Sublime path/license/network diagnostics.
+set -euo pipefail
+OUT="${1:-/tmp/sublime-trace-$(date +%s)}"
+mkdir -p "$OUT"
+timeout "${SUBLIME_TRACE_SECONDS:-8}" strace -ff -tt -s 256 -o "$OUT/trace" \
+  -e trace=openat,access,statx,connect,sendto,recvfrom,read,write,execve \
+  /opt/sublime_text/sublime_text >"$OUT/stdout" 2>"$OUT/stderr" || true
+python3 - "$OUT" <<'PY'
+import glob,re,sys
+root=sys.argv[1]
+print('trace:',root)
+for f in glob.glob(root+'/trace.*'):
+    for line in open(f,errors='ignore'):
+        if any(x in line for x in ['License.sublime_license','license.sublimehq.com','connect(']):
+            print(f.rsplit('.',1)[-1], line.strip())
+PY
