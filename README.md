@@ -20,6 +20,8 @@ patch site structurally, not by hardcoded offsets. Below `4176` the binary
 changes shape. Start with the [research index](research/README.md) for the full
 reverse-engineering record.
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/stephanschielke/sublime-text-4-dev-patcher)
+
 ## Layout
 
 ```
