@@ -9,8 +9,7 @@
   ],
   "exclude": [
     ".venv",
-    "**/__pycache__",
-    "sublime-dev-binary-for-tests/patchwork"
+    "**/__pycache__"
   ],
   "reportMissingModuleSource": "none"
 }
