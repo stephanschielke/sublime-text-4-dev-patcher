@@ -80,6 +80,7 @@ Clean reference binary md5: `c7539dda818f0c3537ba6cfa0f872fa9`.
 | ST4 4200 | Linux x64 | 5-site `xxd` recipe; md5 `cf2ba60236f6284da1581e29c3df35e7`→`fafcd973c631fcea17d77b04bbbb9652`; or perl `0F B6 51 05 83 F2 01`→`C6 41 05 01 B2 00 90` | SRC-GIST-LINUX-4200, SRC-ISSUE-23, SRC-GIST-FADI | EXP-RET0 (5-site) |
 | **ST4 4205** | **Linux x64** | **5-site recipe ported forward; `IsValidLicense → xor rax,rax; inc rax; ret` (=1)** | **this project (ports SRC-GIST-LINUX-4200)** | **EXP-RET1 → PATCH-4205-A** |
 | **ST4 4206** | **Linux x64** | **5-site recipe; `IsValidLicense → mov eax,280; ret`** | **this project (same locator)** | **280 → PATCH-4206-A** |
+| **ST4 4207** | **Linux x64** | **5-site recipe; `IsValidLicense → mov eax,280; ret`** | **this project (same locator)** | **280 → PATCH-4207-A** |
 | ST4 4107-4206 | Windows x64 | signature-scanned `ret0`(<4205)/`ret1`(>=4205) enum patch | SRC-PATCHER | EXP-RET0/RET1 (signature) |
 | Sublime Merge 2112/2121 | Linux x64 | `48 C7 C0 01 00 00 00 C3` at fn start (NOT Sublime Text) | SRC-GIST-MAC-4200, SRC-GIST-JERRY | n/a |
 
@@ -99,7 +100,7 @@ treats as "valid" is **not monotonic** in the build number:
 | `0` (callers `test eax,eax`) | 4176-4200, 4203, 4204 |
 | `1` (callers `cmp eax,1`) | 4202, 4205 |
 | `0x118` (callers `cmp eax,0x118`) | 4201 only (a status code, not a bool) |
-| 280 | 4206 (callers `cmp eax,280`) |
+| 280 | 4206, 4207 (callers `cmp eax,280`) |
 
 So the patcher never assumes a value: it reads the immediate from each caller's
 compare and emits the matching return stub. Full per-build evidence:

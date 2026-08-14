@@ -15,7 +15,7 @@
 
 For those unaware: any `dev` build **requires a license**. A developer who wants to test a plugin against the new host before it reaches a [stable release](https://www.sublimetext.com/download) either waits for the stable rollout, [buys a license](https://www.sublimehq.com/store/text) to test early, or studies how the startup license check works. This repository documents that reverse-engineering work and provides a repeatable patcher for a user-owned copy.
 
-The patcher is **build-agnostic across builds `4176`-`4206`**: it resolves every
+The patcher is **build-agnostic across builds `4176`-`4207`**: it resolves every
 patch site structurally, not by hardcoded offsets. Below `4176` the binary
 changes shape. Start with the [research index](research/README.md) for the full
 reverse-engineering record.
@@ -46,7 +46,7 @@ docs/                   project documentation
 research/               Sublime reverse-engineering record + prior art
   README.md             RE documentation index (start here)
   sublime-4205-license-patch.md   primary RE record (glossary, sites, signatures, mermaid)
-  cross-build-generalization.md   build-agnostic locator, 4176-4206 tables, 4175 roadblock
+  cross-build-generalization.md   build-agnostic locator, 4176-4207 tables, 4175 roadblock
   sources-and-version-map.md      prior-art source links + version/OS/patch map
   RESEARCH_NOTES.md               prior-art overview (platform/version/strategy table)
   st4205-license-map.md / .json   raw string xrefs, relocs, disassembly dumps
@@ -90,12 +90,12 @@ mise run channels:refresh        # or: ./downloads/download.sh --refresh-channel
 ```bash
 # 0. (only for a brand-new build not yet in the committed cache) refresh the
 #    channel list first, else download.sh cannot place it. The committed
-#    official-versions.json lags the CDN, so a just-released build (e.g. 4206)
+#    official-versions.json lags the CDN, so a just-released build (e.g. 4207)
 #    needs this once:
 mise run channels:refresh
 
 # 1. fetch a build (re-downloadable; binaries are git-ignored)
-./downloads/download.sh 4205        # or any build, e.g. 4206
+./downloads/download.sh 4205        # or any build, e.g. 4206/4207
 
 # 2. patch a user-owned copy of the clean binary (no sudo)
 #    download.sh extracts the x64 tarball to downloads/<channel>/build-<N>/;
@@ -104,7 +104,7 @@ uv run st4patch \
     --src binaries/clean-original/4205-linux-amd64/sublime_text \
     --out /tmp/sublime_text.patched
 # expected out md5: 4eec4c3506773e9899cdbe8e463ab9c0  (recipe PATCH-4205-A)
-# the patcher is build-agnostic: on 4206 it auto-detects the valid-return
+# the patcher is build-agnostic: on 4206/4207 it auto-detects the valid-return
 # convention (280) and self-verifies -- no per-build flags needed.
 
 # 2b. fully hardened: license + phone-home block + updater + crash-report off
@@ -113,7 +113,7 @@ uv run st4patch --src <clean binary> --out /tmp/sublime_text.patched --hosts --n
 # 3. resolve patch offsets on any build (signatures + caller fingerprint)
 uv run st4patch --src <clean binary> --locate
 # -> prints the five offsets + inferred valid-return value; "LOCATE: MATCH" on clean 4205
-# patching itself is build-agnostic: validated on 4176-4206 (30 builds, incl.
+# patching itself is build-agnostic: validated on 4176-4207 (31 builds, incl.
 # 4201's magic-value convention). A descending battery hits a structural roadblock
 # at 4175 (notify-function prologues recompiled); see research/ for the era boundary.
 # (e.g. uv run st4patch --src 4204 --out /tmp/p --hosts)

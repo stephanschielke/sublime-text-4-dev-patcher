@@ -37,6 +37,7 @@ RECIPE_MD5 = {
 # Clean-input md5s for builds the patcher has been validated against (advisory
 # only; patching never requires a match -- the locator works by structure).
 KNOWN_CLEAN_MD5 = {
+    "4c62e941aeb0026cc5037541ed05cf0a": 4207,
     "edd8e1c2e77d7b4cb3fdeae692965b0a": 4206,
     "c7539dda818f0c3537ba6cfa0f872fa9": 4205,
     "2b330244b229185fe593de61e7713f4a": 4204,

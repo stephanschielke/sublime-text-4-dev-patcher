@@ -32,7 +32,7 @@
 
 > **Scope:** this document works the patch through on build **4205** (the
 > concrete, hand-verified record). The shipped patcher is **build-agnostic across
-> 4176-4206** by resolving every site structurally rather than by 4205 offsets;
+> 4176-4207** by resolving every site structurally rather than by 4205 offsets;
 > for the cross-build story, per-build tables, and the 4175 roadblock see
 > [`cross-build-generalization.md`](cross-build-generalization.md).
 

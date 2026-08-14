@@ -19,7 +19,7 @@ Channels are assigned from the official APT `Packages` indices, cached in
 `official-versions.json` (see the repo README "Build channels" section):
 
 * `sublime-text-stable/` - build is in the official stable index (e.g. 4200),
-* `sublime-text-dev/` - build is in the official dev index (e.g. 4199, 4205),
+* `sublime-text-dev/` - build is in the official dev index (e.g. 4199, 4205, 4207),
 * `unlisted-dev-builds/` - build is in neither index (e.g. 4201-4204).
 
 Regenerate any build: `./download.sh 4205`. Refresh the channel cache from the

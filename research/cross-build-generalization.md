@@ -1,4 +1,4 @@
-# Cross-build generalization (4176-4206, build-agnostic patcher)
+# Cross-build generalization (4176-4207, build-agnostic patcher)
 
 The original patcher hardcoded 4205 file offsets and keyed IsValidLicense on the
 exact byte signature `83 F8 01 0F 94 47 05` (`cmp eax,1; sete [rdi+5]`). That
@@ -49,15 +49,15 @@ loudly rather than be mis-patched.
 
 ## Per-build offset table (fileoff; .text VA = fileoff + 0x1000)
 
-| site            | 4199      | 4200      | 4201      | 4202      | 4203      | 4204      | 4205      | 4206      |
-|-----------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
-| nop1            | 0x556721  | 0x571483  | 0x55b59b  | 0x55b5cb  | 0x53b067  | 0x53b067  | 0x53b097  | —         |
-| nop2            | 0x55673a  | 0x57149c  | 0x55b5b4  | 0x55b5e4  | 0x53b080  | 0x53b080  | 0x53b0b0  | —         |
-| ret_notify1     | 0x569578  | 0x584378  | 0x56d774  | 0x56d788  | 0x54d258  | 0x54d260  | 0x54d288  | —         |
-| isvalidlicense  | 0x569858  | 0x584658  | 0x56da54  | 0x56da68  | 0x54d538  | 0x54d540  | 0x54d568  | —         |
-| ret_notify2     | 0x56b206  | 0x586008  | 0x56f440  | 0x56f430  | 0x54ef20  | 0x54ef3e  | 0x54ef4c  | —         |
-| hosts string    | 0xce13c   | 0xce0ec   | 0xcef5c   | 0xcef5c   | 0xcf39c   | 0xcf39c   | 0xcf39c   | —         |
-| valid return    | 0         | 0         | 0x118     | 1         | 0         | 0         | 1         | 280      |
+| site            | 4199      | 4200      | 4201      | 4202      | 4203      | 4204      | 4205      | 4206      | 4207      |
+|-----------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+| nop1            | 0x556721  | 0x571483  | 0x55b59b  | 0x55b5cb  | 0x53b067  | 0x53b067  | 0x53b097  | —         | 0x538007  |
+| nop2            | 0x55673a  | 0x57149c  | 0x55b5b4  | 0x55b5e4  | 0x53b080  | 0x53b080  | 0x53b0b0  | —         | 0x538020  |
+| ret_notify1     | 0x569578  | 0x584378  | 0x56d774  | 0x56d788  | 0x54d258  | 0x54d260  | 0x54d288  | —         | 0x54a214  |
+| isvalidlicense  | 0x569858  | 0x584658  | 0x56da54  | 0x56da68  | 0x54d538  | 0x54d540  | 0x54d568  | —         | 0x54a4f4  |
+| ret_notify2     | 0x56b206  | 0x586008  | 0x56f440  | 0x56f430  | 0x54ef20  | 0x54ef3e  | 0x54ef4c  | —         | 0x54bec6  |
+| hosts string    | 0xce13c   | 0xce0ec   | 0xcef5c   | 0xcef5c   | 0xcf39c   | 0xcf39c   | 0xcf39c   | —         | —         |
+| valid return    | 0         | 0         | 0x118     | 1         | 0         | 0         | 1         | 280      | 280       |
 
 The offsets jump around freely (4199-4202 cluster near 0x55-0x58, 4203-4205 near
 0x53-0x54), which is exactly why nothing is hardcoded -- every site is resolved
@@ -134,11 +134,11 @@ patched binary and needs no extra filesystem step.
 
 ### Per-build offsets (differ by build, so located dynamically)
 
-| string                       | 4199     | 4200     | 4201     | 4202     | 4203     | 4204     | 4205     | 4206     |
-|------------------------------|----------|----------|----------|----------|----------|----------|----------|----------|
-| update host (latest_version) | 0xee533  | 0xee477  | 0xef339  | 0xef339  | 0xefc39  | 0xefc39  | 0xefc46  | —        |
-| update path (/updates/)      | 0xe3db7  | 0xf9559  | 0xd47d3  | 0xec402  | 0xd28ad  | 0xe9946  | 0xe52c4  | —        |
-| crash host                   | 0xdb169  | 0xdb0ee  | 0xdc00d  | 0xdbfde  | 0xdc674  | 0xdc633  | 0xdc633  | —        |
+| string                       | 4199     | 4200     | 4201     | 4202     | 4203     | 4204     | 4205     | 4206     | 4207     |
+|------------------------------|----------|----------|----------|----------|----------|----------|----------|----------|----------|
+| update host (latest_version) | 0xee533  | 0xee477  | 0xef339  | 0xef339  | 0xefc39  | 0xefc39  | 0xefc46  | —        | —        |
+| update path (/updates/)      | 0xe3db7  | 0xf9559  | 0xd47d3  | 0xec402  | 0xd28ad  | 0xe9946  | 0xe52c4  | —        | —        |
+| crash host                   | 0xdb169  | 0xdb0ee  | 0xdc00d  | 0xdbfde  | 0xdc674  | 0xdc633  | 0xdc633  | —        | —        |
 
 The update-path offset swings wildly across builds (0xd28ad to 0xf9559),
 underscoring why the path is located dynamically off the unique
@@ -161,8 +161,9 @@ appears licensed, that setting is a complementary user-space option, while
 | 4204  | 0     | 2b330244b229185fe593de61e7713f4a   | (see locator output)               | (see locator output)               |
 | 4205  | 1     | c7539dda818f0c3537ba6cfa0f872fa9   | 4eec4c3506773e9899cdbe8e463ab9c0   | (with --hosts: b2ad2138..)         |
 | 4206  | 280    | edd8e1c2e77d7b4cb3fdeae692965b0a | cb7cd5e3bb3464d2ea271a6ea6911461   | —                                  |
+| 4207  | 280   | 4c62e941aeb0026cc5037541ed05cf0a   | 8bbf5d5873d64484aecd9f56c8abb4f0   | 592ae21abd442d6659827aedaaf2e94d   |
 
-Eight builds, one algorithm. 4199/4200/4202/4203/4204/4205/4206 each needed **zero**
+Nine builds, one algorithm. 4199/4200/4202/4203/4204/4205/4206/4207 each needed **zero**
 code changes (4200 = stable channel, 4202 = early valid==1, 4199 = the oldest dev
 build tested and absorbed with no adjustment at all). **4201 was the only build
 that ever forced a code change**: its IsValidLicense returns the status code
@@ -177,8 +178,8 @@ window, no `(UNREGISTERED)` nag). Known clean md5s are advisory-only in
 ## Battery test: descending sweep and the 4176 floor
 
 A descending battery (locate + patch + self-verify per build) ran from 4198 down
-until the first structural failure. **Every downloadable build 4176-4206 passes**
-(30 builds; 4179 is absent from the CDN (HTTP 404) so 30 of the 31-wide range were
+until the first structural failure. **Every downloadable build 4176-4207 passes**
+(31 builds; 4179 is absent from the CDN (HTTP 404) so 31 of the 32-wide range were
 actually fetched and tested -- a hosting gap, not a patcher limit). Below 4202 the
 valid convention is 0 except 4201 (0x118); full clean md5s recorded in
 `KNOWN_CLEAN_MD5`. The sweep added 4176-4198 with **zero** code changes.
@@ -220,5 +221,5 @@ per sub-era.
 
 | range       | status                                                          |
 |-------------|-----------------------------------------------------------------|
-| 4176 - 4206 | validated build-agnostic (4179 missing on CDN, not a limit)     |
+| 4176 - 4207 | validated build-agnostic (4179 missing on CDN, not a limit)     |
 | <= 4175     | roadblock: notify-prologue signatures recompiled (era boundary) |

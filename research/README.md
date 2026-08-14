@@ -9,17 +9,17 @@
 > [`LICENSE`](../LICENSE), [`DISCLAIMER.md`](../DISCLAIMER.md), and
 > [`NOTICE.md`](../NOTICE.md).
 
-Reverse-engineering record for the Sublime Text 4 (Linux x64) startup license window, and the build-agnostic patcher derived from it. The patcher is validated across **builds 4176-4206**; below 4176 the binary changes shape (see the roadblock note in the cross-build record).
+Reverse-engineering record for the Sublime Text 4 (Linux x64) startup license window, and the build-agnostic patcher derived from it. The patcher is validated across **builds 4176-4207**; below 4176 the binary changes shape (see the roadblock note in the cross-build record).
 
 Read in this order.
 
 ## 1. Primary record (start here)
 
-- [`sublime-4205-license-patch.md`](sublime-4205-license-patch.md) - the central document. Glossary, the five patch sites, byte signatures, before/after control-flow diagrams, the PATCH-4205-A/-A-hosts/-B recipes, the repeatable procedure, and the signature method for finding the sites in a future build. Worked through on build 4205; the locator generalizes it to 4176-4206.
+- [`sublime-4205-license-patch.md`](sublime-4205-license-patch.md) - the central document. Glossary, the five patch sites, byte signatures, before/after control-flow diagrams, the PATCH-4205-A/-A-hosts/-B recipes, the repeatable procedure, and the signature method for finding the sites in a future build. Worked through on build 4205; the locator generalizes it to 4176-4207.
 
 ## 2. Cross-build generalization
 
-- [`cross-build-generalization.md`](cross-build-generalization.md) - how the patcher became build-agnostic across 4176-4206: the caller-fingerprint locator, the (non-monotonic) IsValidLicense return convention, per-build offset and md5 tables, the network-hardening flags, and the **4175 roadblock** (notify-function prologues recompiled). **This is the authority for per-build facts.**
+- [`cross-build-generalization.md`](cross-build-generalization.md) - how the patcher became build-agnostic across 4176-4207: the caller-fingerprint locator, the (non-monotonic) IsValidLicense return convention, per-build offset and md5 tables, the network-hardening flags, and the **4175 roadblock** (notify-function prologues recompiled). **This is the authority for per-build facts.**
 
 ## 3. Prior art and version map
 
@@ -43,6 +43,6 @@ Read in this order.
 - **Recipes:** `PATCH-4205-A` (full 5-site, working), `PATCH-4205-A-hosts`,
   `PATCH-4205-B` (IsValidLicense-only).
 - **The IsValidLicense return convention is NOT a clean `< 4205` / `>= 4205`
-  boundary.** The value a build treats as valid is non-monotonic: `0` on 4176-4200/4203/4204, `1` on 4202/4205, `0x118` on 4201, `280` on 4206. The locator reads it per build from the caller's `cmp`; see
+  boundary.** The value a build treats as valid is non-monotonic: `0` on 4176-4200/4203/4204, `1` on 4202/4205, `0x118` on 4201, `280` on 4206/4207. The locator reads it per build from the caller's `cmp`; see
   [`cross-build-generalization.md`](cross-build-generalization.md).
 - Cite real GitHub URLs only; no informal author names in prose.
