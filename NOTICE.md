@@ -25,7 +25,7 @@ The patcher depends on the following open-source Python packages, declared in
 
 - `capstone` — disassembly framework (BSD-3-Clause)
 - `pyelftools` — ELF/DWARF parser (public domain / Unlicense)
-- `debian-inspector` — Debian package index parsing (Apache-2.0)
+- `debian-inspector` — Debian package index parsing (Apache-2.0 AND BSD-3-Clause AND MIT)
 
 ## Prior art
 

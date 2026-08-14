@@ -36,7 +36,6 @@ tests/                  pytest suite (pure-logic always runs; binary tests skip 
 binaries/               the binaries under test (git-ignored blobs)
   clean-original/4205-linux-amd64/sublime_text   pristine reference binary
   patches-candidates/   patched variants (PATCH-4205-A/-A-hosts/-B + EXP-* experiments)
-    try.sh              quick local install/compare helper for candidates
 downloads/              re-downloadable release artifacts (git-ignored blobs)
   download.sh           re-fetch any build/arch into the channel/build tree
   official-versions.json official dev/stable build sets (cached from the APT indices)
@@ -90,16 +89,17 @@ mise run channels:refresh        # or: ./downloads/download.sh --refresh-channel
 ```bash
 # 0. (only for a brand-new build not yet in the committed cache) refresh the
 #    channel list first, else download.sh cannot place it. The committed
-#    official-versions.json lags the CDN, so a just-released build (e.g. 4207)
-#    needs this once:
+#    official-versions.json lags the CDN, so a just-released build needs this
+#    once:
 mise run channels:refresh
 
 # 1. fetch a build (re-downloadable; binaries are git-ignored)
 ./downloads/download.sh 4205        # or any build, e.g. 4206/4207
 
 # 2. patch a user-owned copy of the clean binary (no sudo)
-#    download.sh extracts the x64 tarball to downloads/<channel>/build-<N>/;
-#    point --src at the extracted sublime_text (or the committed 4205 reference).
+#    download.sh downloads the x64 tarball into downloads/<channel>/build-<N>/;
+#    extract it manually and point --src at the extracted sublime_text
+#    (or the committed 4205 reference).
 uv run st4patch \
     --src binaries/clean-original/4205-linux-amd64/sublime_text \
     --out /tmp/sublime_text.patched
