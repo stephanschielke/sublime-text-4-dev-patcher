@@ -102,6 +102,10 @@ treats as "valid" is **not monotonic** in the build number:
 | `0x118` (callers `cmp eax,0x118`) | 4201 only (a status code, not a bool) |
 | 280 | 4206, 4207 (callers `cmp eax,280`) |
 
+> `0x118` is `280` in decimal — the 4201 "magic value" and the 4206/4207 "280"
+> convention are the SAME integer, so both emit the byte-identical payload
+> `b8 18 01 00 00 c3 90 90`.
+
 So the patcher never assumes a value: it reads the immediate from each caller's
 compare and emits the matching return stub. Full per-build evidence:
 [`cross-build-generalization.md`](cross-build-generalization.md).

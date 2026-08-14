@@ -13,7 +13,7 @@ prologues, the phone-home string) is byte-identical or trivially relocatable.
 
 1. **IsValidLicense return convention varies.** The callers reveal what value
    they treat as "valid":
-   - `test eax,eax; ... sete [reg+disp]` => valid == **0** (4199, 4200, 4203, 4204).
+   - `test eax,eax; ... sete [reg+disp]` => valid == **0** (4176-4200 except 4201, plus 4203, 4204).
    - `cmp eax,1; ... sete [reg+disp]` => valid == **1** (4202, 4205).
    - `cmp eax,0x118; ... sete [reg+disp]` => valid == **0x118** (4201 only -- a
      status code, not a bool).
@@ -51,11 +51,11 @@ loudly rather than be mis-patched.
 
 | site            | 4199      | 4200      | 4201      | 4202      | 4203      | 4204      | 4205      | 4206      | 4207      |
 |-----------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
-| nop1            | 0x556721  | 0x571483  | 0x55b59b  | 0x55b5cb  | 0x53b067  | 0x53b067  | 0x53b097  | —         | 0x538007  |
-| nop2            | 0x55673a  | 0x57149c  | 0x55b5b4  | 0x55b5e4  | 0x53b080  | 0x53b080  | 0x53b0b0  | —         | 0x538020  |
-| ret_notify1     | 0x569578  | 0x584378  | 0x56d774  | 0x56d788  | 0x54d258  | 0x54d260  | 0x54d288  | —         | 0x54a214  |
-| isvalidlicense  | 0x569858  | 0x584658  | 0x56da54  | 0x56da68  | 0x54d538  | 0x54d540  | 0x54d568  | —         | 0x54a4f4  |
-| ret_notify2     | 0x56b206  | 0x586008  | 0x56f440  | 0x56f430  | 0x54ef20  | 0x54ef3e  | 0x54ef4c  | —         | 0x54bec6  |
+| nop1            | 0x556721  | 0x571483  | 0x55b59b  | 0x55b5cb  | 0x53b067  | 0x53b067  | 0x53b097  | 0x537057  | 0x538007  |
+| nop2            | 0x55673a  | 0x57149c  | 0x55b5b4  | 0x55b5e4  | 0x53b080  | 0x53b080  | 0x53b0b0  | 0x537070  | 0x538020  |
+| ret_notify1     | 0x569578  | 0x584378  | 0x56d774  | 0x56d788  | 0x54d258  | 0x54d260  | 0x54d288  | 0x549254  | 0x54a214  |
+| isvalidlicense  | 0x569858  | 0x584658  | 0x56da54  | 0x56da68  | 0x54d538  | 0x54d540  | 0x54d568  | 0x549534  | 0x54a4f4  |
+| ret_notify2     | 0x56b206  | 0x586008  | 0x56f440  | 0x56f430  | 0x54ef20  | 0x54ef3e  | 0x54ef4c  | 0x54af28  | 0x54bec6  |
 | hosts string    | 0xce13c   | 0xce0ec   | 0xcef5c   | 0xcef5c   | 0xcf39c   | 0xcf39c   | 0xcf39c   | —         | —         |
 | valid return    | 0         | 0         | 0x118     | 1         | 0         | 0         | 1         | 280      | 280       |
 
@@ -63,7 +63,9 @@ The offsets jump around freely (4199-4202 cluster near 0x55-0x58, 4203-4205 near
 0x53-0x54), which is exactly why nothing is hardcoded -- every site is resolved
 by structure. The "valid return" row shows the convention is not monotonic in the
 build number: 4202 already returns 1, and 4201 is the lone magic-value build
-(0x118).
+(0x118). Note: `0x118` == `280` decimal -- the 4201 "magic value" and the
+4206/4207 "280" convention are the SAME integer, emitted as the byte-identical
+payload `b8 18 01 00 00 c3 90 90`.
 
 ## Patch payload (size-preserving, fixed 8-byte slot at IsValidLicense)
 
@@ -143,6 +145,12 @@ patched binary and needs no extra filesystem step.
 The update-path offset swings wildly across builds (0xd28ad to 0xf9559),
 underscoring why the path is located dynamically off the unique
 `_update_check?version` anchor rather than by any fixed offset.
+
+> Table note: a "—" in the network-string rows (e.g. 4206/4207) means the offset
+> is **unrecorded, not absent** -- the `latest_version`, `_update_check?version`,
+> and `crash-server.sublimehq.com` strings DO exist in the 4206/4207 binaries;
+> they simply were not pinned per build, since the hosts are located dynamically
+> by anchor.
 
 For licensed users, Sublime also honors `"update_check": false` in
 `Packages/User/Preferences.sublime-settings`; since a license-patched binary

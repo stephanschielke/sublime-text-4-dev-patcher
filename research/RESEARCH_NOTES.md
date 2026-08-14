@@ -20,7 +20,8 @@ A high-level summary of publicly published Sublime Text / Sublime Merge license 
 | macOS x86_64 | ST4 4200 | SRC-REPO-QZ, SRC-GIST-MAC-4200 | 5-site |
 | macOS ARM64 | ST4 4200 | SRC-GIST-MAC-4200 | 5-site |
 | **Linux x64** | **ST4 4200** | **SRC-GIST-LINUX-4200** | **5-site (basis for this project)** |
-| **Linux x64** | **ST4 4205-4207** | **this project** | **EXP-RET1 to PATCH-4205-A** |
+| **Linux x64** | **ST4 4205** | **this project** | **EXP-RET1 to PATCH-4205-A** |
+| **Linux x64** | **ST4 4206-4207** | **this project** | **280-convention (PATCH-4206-A / PATCH-4207-A)** |
 | Windows x64 | ST4 4107-4206 | SRC-PATCHER | signature scan |
 | Linux x64 | Sublime Merge 2112/2121 | SRC-GIST-MAC-4200, SRC-GIST-JERRY | not Sublime Text |
 

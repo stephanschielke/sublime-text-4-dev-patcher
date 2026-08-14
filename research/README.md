@@ -41,7 +41,8 @@ Read in this order.
 
 - **Experiments:** `EXP-VTABLE` (failed, vtable-dispatched), `EXP-RET0` (failed on 4205, IsValidLicense -> 0), `EXP-RET1` (works on 4205, -> 1).
 - **Recipes:** `PATCH-4205-A` (full 5-site, working), `PATCH-4205-A-hosts`,
-  `PATCH-4205-B` (IsValidLicense-only).
+  `PATCH-4205-B` (IsValidLicense-only), `PATCH-4206-A` and `PATCH-4207-A`
+  (the 4206/4207 recipes, valid-return 280).
 - **The IsValidLicense return convention is NOT a clean `< 4205` / `>= 4205`
   boundary.** The value a build treats as valid is non-monotonic: `0` on 4176-4200/4203/4204, `1` on 4202/4205, `0x118` on 4201, `280` on 4206/4207. The locator reads it per build from the caller's `cmp`; see
   [`cross-build-generalization.md`](cross-build-generalization.md).

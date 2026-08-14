@@ -26,7 +26,7 @@
 | Program     | Sublime Text, Build **4205**, Linux x64 ELF                           |
 | Path        | `/opt/sublime_text/sublime_text`                                      |
 | Clean md5   | `c7539dda818f0c3537ba6cfa0f872fa9`                                    |
-| Plugin host | `plugin_host-3.14` (selected by `.python-version` = `3.14`)           |
+| Plugin host | `plugin_host-3.14` — the plugin runtime inside Sublime; this repo's own toolchain is Python 3.12 (`.python-version`), not 3.14           |
 | ELF mapping | `.text` fileoff `0x3138d0` / VA `0x3148d0`; **VA = fileoff + 0x1000** |
 | `.rodata`   | VA == fileoff for the string offsets below                            |
 
@@ -361,8 +361,10 @@ Add `--hosts` to also apply the `license.sublimehq.com → 127.0.0.1` block
 
 ```bash
 uv run st4patch --src /opt/sublime_text/sublime_text --verify-only
-# prints CLEAN / PATCHED / MISMATCH per site; the patcher also no-ops sites
-# that are already patched, so it is safe to re-run.
+# prints CLEAN / PATCHED / MISMATCH per site. Only --verify-only is safe to
+# re-run on an already-patched binary: the patch destroys the notify-prologue
+# first byte (0x41 -> 0xc3), so --locate/patch on a patched binary fails with
+# "signature not unique (0 hits)" — the sites are NOT no-op'd.
 ```
 
 ### Install (owner, sudo)
@@ -376,11 +378,23 @@ subl
 
 ## Reproducibility guarantees
 
-- The patcher asserts the clean source md5 (`c7539dda…`) and, per site, asserts the **original bytes** before writing - it aborts on any layout mismatch, so a different build cannot be silently mis-patched.
-- Each patch is byte-length-equal to the original, so the ELF is not resized and no offsets shift.
+- The clean-md5 check is **advisory only**: a mismatch prints a WARNING
+  ("proceeding by signature") and patching continues via structural locate —
+  `KNOWN_CLEAN_MD5` is never enforced.
+- Every patch site is resolved structurally (locate); ambiguity (zero or
+  several candidates) is reported as a hard error, never guessed, so a
+  different build cannot be silently mis-patched.
+- After writing, the patch is **self-verified** (`verify_located`): the patched
+  sites are re-located and compared against the expected payload, and the
+  patcher aborts on any mismatch. (The per-site original-byte assertion exists
+  only in the legacy SITES path used by tests, not in the live patch path.)
+- Each patch is byte-length-equal to the original, so the ELF is not resized
+  and no offsets shift.
 - Running the patcher on the clean 4205 source deterministically yields md5
   `4eec4c3506773e9899cdbe8e463ab9c0` (PATCH-4205-A).
-- The patcher is idempotent: already-patched sites are detected and skipped.
+- The patcher is **not** idempotent on an already-patched binary: the patch
+  destroys the notify-prologue signature, so `--locate`/patching fails with
+  "signature not unique (0 hits)"; only `--verify-only` is safely re-runnable.
 
 ## History of dead-ends (why earlier candidates failed)
 
